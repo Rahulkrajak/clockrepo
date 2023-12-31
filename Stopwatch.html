@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<title>Stop Watch</title>
+    <head>
+        <style type="text/css">
+            #divctime{
+                border: 5px solid red;
+                width: 300px;
+                height: 320px;
+                border-radius: 50% 50% 50% 50%/80% 80% 20% 20%;
+                background-image: repeating-radial-gradient(green 10%,orange, gray);
+            }
+            .txtctime_class{
+                height: 30px;
+                width: 80px;
+                font-size: 30px;
+                text-align: center;
+                color:snow;
+                background-image: repeating-linear-gradient(pink,gray,blue,magenta);
+            }
+            .btn{
+                height: 40px;
+                width: 70px;
+                font-size: 20px;
+                color: snow;
+                background-image: radial-gradient(blue 40%,gray,magenta);
+            }
+            .disp{
+                font-size: 40px;
+                text-align: center;
+                background-image: radial-gradient(orange 10%,pink 20%, gray 30px);
+            }
+            label{
+                font-family:fantasy;
+            }
+            
+        </style>
+    </head>
+    <body>
+    <center>
+    <form>
+        <div id="divctime">
+            <br>
+            <label style="color: aqua; font-family:serif; font-size: 25px;">Stop Watch</label>
+            <hr style="width: 170px;">
+            <input type="text" id="ml" value="0" class="txtctime_class"><br>
+            <input type="text" id="ss" value="0" class="txtctime_class"><br>
+            <input type="text" id="mm" value="0" class="txtctime_class"><br>
+            <input type="text" id="hh" value="0" class="txtctime_class"><br><br>
+        
+            <input type="button" value="Start" id="startTimer" class="btn">
+            <input type="button" value="Stop" id="stopTimer" class="btn">
+            <input type="reset" value="Reset" id="resetTimer" class="btn">
+        </div>
+        <br><br>
+        <div id="divmsg">
+            <label>Hour : </label><input type="text" id="msghr" class="disp">
+            <label>Minut : </label><input type="text" id="msgmin" class="disp">
+            <label>Second : </label><input type="text" id="msgsec" class="disp">
+        </div>
+    </form>
+    </center>
+        <script type="text/javascript">
+            
+            const d1=new Date();
+            let t=d1.toLocaleTimeString();
+            let ms;
+            let sec=0;
+            let min=0;
+            let hr=0;
+            var intervalId;
+            
+            var start_timer=document.getElementById("startTimer");
+            var stop_timer=document.getElementById("stopTimer");
+            var reset_timer=document.getElementById("resetTimer");
+            var divmsg=document.getElementById("divmsg");
+            var mtxthr=document.getElementById("msghr");
+            var mtxtmin=document.getElementById("msgmin");
+            var mtxtsec=document.getElementById("msgsec");
+            
+            function myfun(n)
+            {
+                
+                const d=new Date();
+                let time=d.toLocaleTimeString();
+                {
+                    ms=Math.round((d.getTime()-d1.getTime()));
+                    while(ms>=1000){
+                        ms%=1000;
+                        if(ms<=1001&&ms>=900){
+                           sec++;
+                            if(sec>=60){
+                                sec%=60;
+                                min++;
+                                if(min>=60){
+                                    min%=60;
+                                    hr++;
+                                }
+                            }
+                           }
+                        
+                    }
+                    
+                    document.getElementById("ml").value=ms;
+                    document.getElementById("ss").value=sec;
+                    document.getElementById("mm").value=min;
+                    document.getElementById("hh").value=hr;
+                }  
+            }
+            
+            function start_stop_effects(dv1,hh1,mm1,ss1,dvcolor,dvborder,boxborder,hw){
+                dv1.style.color=dvcolor;
+                dv1.style.border=dvborder;
+                dv1.style.padding="50px";
+                dv1.style.width="360px";
+                dv1.style.height="80px";
+                dv1.style.borderRadius="35%";
+                //hh1.style.borderColor=boxcolor;
+                hh1.style.border=boxborder;
+                hh1.style.height=hw;
+                hh1.style.width=hw;
+                
+                //mm1.style.borderColor=boxcolor;
+                mm1.style.border=boxborder;
+                mm1.style.height=hw;
+                mm1.style.width=hw;
+                
+                //ss1.style.borderColor=boxcolor;
+                ss1.style.border=boxborder;
+                ss1.style.height=hw;
+                ss1.style.width=hw;
+                
+            }
+            //fn called for msg style
+                start_stop_effects(divmsg,mtxthr,mtxtmin,mtxtsec,"white","0px solid white","0px solid white","0px");
+            start_timer.onclick=function()
+            {
+                intervalId=setInterval(myfun,100);  
+                start_timer.disabled=true;
+                stop_timer.disabled=false;
+            //fn called for msg style
+                start_stop_effects(divmsg,mtxthr,mtxtmin,mtxtsec,"white","0px solid white","0px solid white","0px");
+            }
+            stop_timer.onclick=function()
+            {
+                clearInterval(intervalId);
+                stop_timer.disabled=true;
+                start_timer.disabled=false;
+            //fill time while stop timer
+                mtxtsec.value=sec;
+                mtxtmin.value=min;
+                mtxthr.value=hr;
+            //fn call for style
+                start_stop_effects(divmsg,mtxthr,mtxtmin,mtxtsec,"darkblue","4px solid blue","2px solid green","50px");
+                
+            }
+            reset_timer.onclick=function()
+            {
+                window.location.reload();
+            
+            }
+        </script>
+    </body>
+</html>

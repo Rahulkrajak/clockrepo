@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<head>
+    <title>Alarm</title>
+    <style type="text/css">
+        #alarmDivId{
+            width: 600px;
+            border: 5px solid magenta;
+            border-radius: 30% 30% 50% 50%;
+            background-image: radial-gradient(circle at left,red,blue,green,yellow,white,black);
+        }
+        #show{
+            height: 30px;
+            width: 200px;
+            font-size: 20px;
+            color: white;
+            background-color: cadetblue;
+        }
+        .txtcls{
+            height: 40px;
+            width: 100px;
+            text-align: center;
+            background-image: linear-gradient(magenta,pink,gray);
+            text-decoration-color: brown;
+            font-weight: bolder;
+            font-size: 20px;
+            font-stretch: extra-expanded;
+        }
+        .alarmbtns{
+            height: 40px;
+            width: 80px;
+            font-size: 18px;
+            font-weight: bolder;
+            background-color:darkslategray;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <div id="alarmDivId">
+            <br>
+        <input id="show" type="text">
+        <br><hr style="width: 300px;"><br>
+            <label style="font-size: 20px; color: white; font-family: monospace;">Set Alarm</label>
+            <br><br>
+        <input id="txthr" type="text" size="4" placeholder="Hour" class="txtcls">
+        <input id="txtmin" type="text" size="4" placeholder="Minut" class="txtcls">
+        <input id="txtsec" type="text" size="4" placeholder="Second" class="txtcls">
+        <select id="txtperiod" class="txtcls">
+            <option>AM</option>
+            <option>PM</option>
+        </select>
+        
+        <br><br>
+        <input type="button" id="btnstart" value="Start" class="alarmbtns">
+        <input type="button" id="btnstop" value="Cancel" class="alarmbtns"><br><br>
+        <input type="button" id="btnsnooze" value="Snooze" class="alarmbtns">
+        <br><br>
+        <audio controls id="music" style="height: 20px; width: 20px;">
+            <source src="music/alarm.mp3" type="audio/mpeg">
+        </audio>
+        </div>
+    </center>
+<script type="text/javascript">
+    let startAlarmBtn=document.getElementById("btnstart");
+    let stopAlarmBtn=document.getElementById("btnstop");
+    let snoozeAlarmBtn=document.getElementById("btnsnooze");
+    stopAlarmBtn.disabled=true;
+    snoozeAlarmBtn.disabled=true;
+     setInterval(function(){
+         const dt=new Date();
+        document.getElementById("show").value="Time : "+dt.toLocaleTimeString();
+        document.getElementById("show").blur(); 
+        document.getElementById("show").style.textAlign="center"; 
+     },100);
+    
+    
+    
+    function myFun(){
+        const d=new Date();
+        var uhr=Number(document.getElementById("txthr").value);
+        var umin=Number(document.getElementById("txtmin").value);
+        var usec=Number(document.getElementById("txtsec").value);
+        var uperiod=document.getElementById("txtperiod").value;
+        //let time=d.toLocaleTimeString();
+        let cperiod;
+        if(d.getHours<=12){
+           var chr=d.getHours(); 
+            cperiod="AM";
+        }
+        else{
+            var chr=d.getHours()-12;
+            cperiod="PM";
+        }
+        var cmin=d.getMinutes();
+        var csec=d.getSeconds();
+        
+        //alert(chr+" "+typeof(uhr));
+        if(uhr==chr&&umin===cmin&&usec===csec&&uperiod===cperiod){
+            var mc=document.getElementById("music").play();
+            stopAlarmBtn.disabled=false;
+            snoozeAlarmBtn.disabled=true;
+            //window.location.reload();
+        }
+    } 
+    
+    startAlarmBtn.onclick=function(){
+        setInterval(myFun,100);
+        startAlarmBtn.disabled=true;
+        stopAlarmBtn.disabled=false;
+    
+    }
+    stopAlarmBtn.onclick=function(){
+        window.location.reload();
+    }
+    
+    var temp_sec=0;
+    snoozeAlarmBtn.onclick=function(){
+        setInterval(function(){
+            temp_sec+=1;
+            if(temp_sec%30===1){
+                document.getElementById("music").pause();
+            }
+            else if(temp_sec%20===10){
+                document.getElementById("music").play();
+            }
+        },1000);
+        
+    }
+    
+    
+</script>
+</body>
